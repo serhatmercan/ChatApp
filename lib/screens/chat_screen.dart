@@ -1,31 +1,46 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ChatApp/widgets/chat/messages.dart';
+import 'package:ChatApp/widgets/chat/new_message.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("chats/1qtLG9PnivW8wBh91zLr/messages").snapshots(),
-        builder: (BuildContext ctx, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            final documents = streamSnapshot.data.docs;
-            return ListView.builder(
-              itemCount: documents.length,
-              itemBuilder: (ctx, index) => Container(
-                padding: EdgeInsets.all(8),
-                child: Text(documents[index]["text"]),
+      appBar: AppBar(
+        title: Text("Chat"),
+        actions: [
+          DropdownButton(
+            icon: Icon(Icons.more_vert),
+            items: [
+              DropdownMenuItem(
+                value: "logout",
+                child: Container(
+                  child: Row(
+                    children: [
+                      Icon(Icons.exit_to_app),
+                      SizedBox(width: 8),
+                      Text("Logout"),
+                    ],
+                  ),
+                ),
               ),
-            );
-          }
-        },
+            ],
+            onChanged: (itemID) {
+              if (itemID == "logout") {
+                FirebaseAuth.instance.signOut();
+              }
+            },
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () =>
-            FirebaseFirestore.instance.collection("chats/1qtLG9PnivW8wBh91zLr/messages").add({"text": "Serhat Mercan"}),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(child: Messages()),
+            NewMessage(),
+          ],
+        ),
       ),
     );
   }
