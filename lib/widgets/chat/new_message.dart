@@ -22,6 +22,7 @@ class _NewMessageState extends State<NewMessage> {
       "createdAt": Timestamp.now(),
       "userId": uid,
       "username": userData["username"],
+      "userImage": userData["image_url"],
     });
     _messageController.clear();
   }
@@ -35,8 +36,11 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
             child: TextField(
-              decoration: InputDecoration(labelText: "Send a message.."),
+              autocorrect: true,
               controller: _messageController,
+              decoration: InputDecoration(labelText: "Send a message.."),
+              enableSuggestions: true,
+              textCapitalization: TextCapitalization.sentences,
               onChanged: (value) {
                 setState(() {
                   _enteredMessage = value;

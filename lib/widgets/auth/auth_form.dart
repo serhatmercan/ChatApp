@@ -76,9 +76,12 @@ class _AuthFormState extends State<AuthForm> {
                 children: [
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   TextFormField(
+                    autocorrect: false,
                     decoration: InputDecoration(labelText: "Email"),
+                    enableSuggestions: false,
                     key: ValueKey("email"),
                     keyboardType: TextInputType.emailAddress,
+                    textCapitalization: TextCapitalization.none,
                     validator: (value) {
                       if (value.isEmpty || !value.contains("@")) {
                         return "Email must be contains @ character";
@@ -92,8 +95,11 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   if (!_isLogin)
                     TextFormField(
+                      autocorrect: true,
                       decoration: InputDecoration(labelText: "Username"),
+                      enableSuggestions: false,
                       key: ValueKey("username"),
+                      textCapitalization: TextCapitalization.words,
                       validator: (value) {
                         if (value.isEmpty || value.length < 4) {
                           return "Username must be at least 4 characters long";
